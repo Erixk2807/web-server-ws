@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>ESP32 Web Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <style>
+        html {
+            font-family: New Times Roman;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #07156d;
+        }
+
+    </style>
+    <title>ESP32 Web Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+</head>
+
+<body>
+
+    <h1>ESP32 WebSocket Server</h1>
+
+    <div class="content">
+        <p>The random number is: <span id='rand'>-</span></p>
+    </div>
+    </div>
+    <script>
+        var gateway = `ws://${window.location.hostname}/ws`;
+        var websocket;
+        window.addEventListener('load', onLoad);
+        function initWebSocket() {
+            console.log('Trying to open a WebSocket connection...');
+            websocket = new WebSocket(gateway);
+            websocket.onopen = onOpen;
+            websocket.onclose = onClose;
+            websocket.onmessage = onMessage; // <-- add this line
+        }
+        function onOpen(event) {
+            console.log('Connection opened');
+        }
+        function onClose(event) {
+            console.log('Connection closed');
+            setTimeout(initWebSocket, 2000);
+        }
+        function onMessage(event) {
+            document.getElementById('rand').innerHTML = event.data;
+            console.log(event.data);
+        }
+        function onLoad(event) {
+            initWebSocket();
+        }
+    </script>
+</body>
+
+</html>
